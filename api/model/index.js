@@ -27,7 +27,7 @@ db.Events = require("./events.js")(sequelize, Sequelize);
 db.EventTypes = require("./eventType.js")(sequelize, Sequelize);
 
 db.sequelize
-  .sync({ force: true })
+  .sync({ force: false })
   .then(async () => {
     console.log("DB Sync Complete");
     const eventTypesCount = await db.EventTypes.count();

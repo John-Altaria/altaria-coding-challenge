@@ -12,6 +12,10 @@ app.use(express.json());
 
 app.use(cors());
 
+const Auth = require("./routers/auth.routes");
+
+app.use("/api/v1/auth", Auth);
+
 app.get("/", (req, res) => {
   res.send("Welcome to John's map API");
 });

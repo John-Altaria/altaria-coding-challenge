@@ -1,20 +1,43 @@
 "use client";
 
+import { yupResolver } from "@hookform/resolvers/yup";
 import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import signupSchema from "@/form-validation-schema/signup";
+import loginSchema from "@/form-validation-schema/login"; // Assuming loginSchema is defined similarly to signupSchema
+import { useAuthEndpoints } from "@/hooks/useAuthEndpoints";
+import { ClipLoader } from "react-spinners";
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isRegisterMode, setIsRegisterMode] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { login, signup } = useAuthEndpoints();
+
+  type FormData = {
+    email: string;
+    password: string;
+    confirmPassword?: string;
+  };
+
+  const formOptions = {
+    resolver: yupResolver(isRegisterMode ? signupSchema : loginSchema),
+  };
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<FormData>({
+    ...formOptions,
+  });
 
   const showRegisterForm = () => {
     setIsRegisterMode(true);
-    setErrorMessage("");
   };
 
   const showLoginForm = () => {
     setIsRegisterMode(false);
-    setErrorMessage("");
   };
 
   const openLoginModal = () => {
@@ -27,12 +50,24 @@ export default function Home() {
     showRegisterForm();
   };
 
-  const loginAjax = () => {
-    shakeModal();
-  };
-
-  const shakeModal = () => {
-    setErrorMessage("Invalid email/password combination");
+  const onSubmit = (data: FormData) => {
+    console.log(data);
+    setLoading(true);
+    if (isRegisterMode) {
+      signup(data, (status) => {
+        setLoading(false);
+        if (status) {
+          reset();
+        }
+      });
+    } else {
+      login(data, (status) => {
+        setLoading(false);
+        if (status) {
+          reset();
+        }
+      });
+    }
   };
 
   return (
@@ -91,73 +126,47 @@ export default function Home() {
                       <span>or</span>
                       <div className="line r"></div>
                     </div>
-                    {errorMessage && (
-                      <div className="error alert alert-danger">
-                        {errorMessage}
-                      </div>
-                    )}
-                    {isRegisterMode ? (
-                      <div className="form registerBox">
-                        <form
-                          method=""
-                          action=""
-                          accept-charset="UTF-8"
-                          encType="multipart/form-data"
-                          data-remote="true"
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                      <div className="form">
+                        <input
+                          {...register("email")}
+                          className="form-control"
+                          type="text"
+                          placeholder="Email"
+                        />
+                        {errors.email && <p>{errors.email.message}</p>}
+                        <input
+                          {...register("password")}
+                          className="form-control"
+                          type="password"
+                          placeholder="Password"
+                        />
+                        {errors.password && <p>{errors.password.message}</p>}
+                        {isRegisterMode && (
+                          <>
+                            <input
+                              {...register("confirmPassword")}
+                              className="form-control"
+                              type="password"
+                              placeholder="Repeat Password"
+                            />
+                            {errors.confirmPassword && (
+                              <p>{errors.confirmPassword.message}</p>
+                            )}
+                          </>
+                        )}
+                        <button
+                          disabled={loading}
+                          type="submit"
+                          className=" w-full py-[.5rem] flex items-center border justify-center gap-[1rem] btn-default"
                         >
-                          <input
-                            id="email"
-                            className="form-control"
-                            type="text"
-                            placeholder="Email"
-                            name="email"
-                          />
-                          <input
-                            id="password"
-                            className="form-control"
-                            type="password"
-                            placeholder="Password"
-                            name="password"
-                          />
-                          <input
-                            id="password_confirmation"
-                            className="form-control"
-                            type="password"
-                            placeholder="Repeat Password"
-                            name="password_confirmation"
-                          />
-                          <button className="btn btn-default btn-register">
-                            Create account
-                          </button>
-                        </form>
+                          <span>
+                            {isRegisterMode ? "Create account" : "Login"}
+                          </span>
+                          {loading && <ClipLoader size={15} />}
+                        </button>
                       </div>
-                    ) : (
-                      <div className="form loginBox">
-                        <form method="" action="" accept-charset="UTF-8">
-                          <input
-                            id="email"
-                            className="form-control"
-                            type="text"
-                            placeholder="Email"
-                            name="email"
-                          />
-                          <input
-                            id="password"
-                            className="form-control"
-                            type="password"
-                            placeholder="Password"
-                            name="password"
-                          />
-                          <button
-                            type="button"
-                            className="btn btn-default btn-login"
-                            onClick={loginAjax}
-                          >
-                            Login
-                          </button>
-                        </form>
-                      </div>
-                    )}
+                    </form>
                   </div>
                 </div>
               </div>
