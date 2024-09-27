@@ -20,7 +20,7 @@ const eventTypeModel = (sequelize, DataTypes) => {
       sequelize,
       modelName: "EventType",
       tableName: "eventTypes",
-      timestamps: true,
+      timestamps: false,
     }
   );
 

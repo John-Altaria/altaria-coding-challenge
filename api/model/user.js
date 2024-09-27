@@ -26,7 +26,7 @@ const userModel = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "User", // Updated to singular
+      modelName: "User",
       tableName: "users",
       timestamps: true,
     }

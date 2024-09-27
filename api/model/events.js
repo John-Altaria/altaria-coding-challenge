@@ -14,7 +14,7 @@ const eventModel = (sequelize, DataTypes) => {
       creatorId: {
         type: DataTypes.INTEGER,
         references: {
-          model: "User",
+          model: "users",
           key: "id",
         },
       },
@@ -25,7 +25,7 @@ const eventModel = (sequelize, DataTypes) => {
       type: {
         type: DataTypes.INTEGER,
         references: {
-          model: "EventType",
+          model: "eventTypes",
           key: "id",
         },
         allowNull: false,
