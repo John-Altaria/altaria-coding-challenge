@@ -1,101 +1,188 @@
-import Image from "next/image";
+"use client";
+
+import React, { useState } from "react";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isRegisterMode, setIsRegisterMode] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const showRegisterForm = () => {
+    setIsRegisterMode(true);
+    setErrorMessage("");
+  };
+
+  const showLoginForm = () => {
+    setIsRegisterMode(false);
+    setErrorMessage("");
+  };
+
+  const openLoginModal = () => {
+    setIsModalOpen(true);
+    showLoginForm();
+  };
+
+  const openRegisterModal = () => {
+    setIsModalOpen(true);
+    showRegisterForm();
+  };
+
+  const loginAjax = () => {
+    shakeModal();
+  };
+
+  const shakeModal = () => {
+    setErrorMessage("Invalid email/password combination");
+  };
+
+  return (
+    <>
+      <div className="h-screen items-center flex flex-col justify-center">
+        <h1 className="mb-10 text-center max-w-[80%]">
+          Welcome to John&apos;s map app
+        </h1>
+        <div className="flex flex-wrap gap-4">
+          <button className="btn big-login" onClick={openLoginModal}>
+            Log in
+          </button>
+          <button className="btn big-register" onClick={openRegisterModal}>
+            Register
+          </button>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      </div>
+
+      {isModalOpen && (
+        <div className="modal" style={{ display: "block" }}>
+          <div className="modal-dialog login animated">
+            <div className="modal-content">
+              <div className="modal-header">
+                <button
+                  type="button"
+                  className="close"
+                  onClick={() => setIsModalOpen(false)}
+                  aria-hidden="true"
+                >
+                  &times;
+                </button>
+                <h4 className="modal-title">
+                  {isRegisterMode ? "Register with" : "Login with"}
+                </h4>
+              </div>
+              <div className="modal-body">
+                <div className="box">
+                  <div className="content">
+                    <div className="social">
+                      <a className="circle github" href="#">
+                        <i className="fa fa-github fa-fw"></i>
+                      </a>
+                      <a id="google_login" className="circle google" href="#">
+                        <i className="fa fa-google-plus fa-fw"></i>
+                      </a>
+                      <a
+                        id="facebook_login"
+                        className="circle facebook"
+                        href="#"
+                      >
+                        <i className="fa fa-facebook fa-fw"></i>
+                      </a>
+                    </div>
+                    <div className="division">
+                      <div className="line l"></div>
+                      <span>or</span>
+                      <div className="line r"></div>
+                    </div>
+                    {errorMessage && (
+                      <div className="error alert alert-danger">
+                        {errorMessage}
+                      </div>
+                    )}
+                    {isRegisterMode ? (
+                      <div className="form registerBox">
+                        <form
+                          method=""
+                          action=""
+                          accept-charset="UTF-8"
+                          encType="multipart/form-data"
+                          data-remote="true"
+                        >
+                          <input
+                            id="email"
+                            className="form-control"
+                            type="text"
+                            placeholder="Email"
+                            name="email"
+                          />
+                          <input
+                            id="password"
+                            className="form-control"
+                            type="password"
+                            placeholder="Password"
+                            name="password"
+                          />
+                          <input
+                            id="password_confirmation"
+                            className="form-control"
+                            type="password"
+                            placeholder="Repeat Password"
+                            name="password_confirmation"
+                          />
+                          <button className="btn btn-default btn-register">
+                            Create account
+                          </button>
+                        </form>
+                      </div>
+                    ) : (
+                      <div className="form loginBox">
+                        <form method="" action="" accept-charset="UTF-8">
+                          <input
+                            id="email"
+                            className="form-control"
+                            type="text"
+                            placeholder="Email"
+                            name="email"
+                          />
+                          <input
+                            id="password"
+                            className="form-control"
+                            type="password"
+                            placeholder="Password"
+                            name="password"
+                          />
+                          <button
+                            type="button"
+                            className="btn btn-default btn-login"
+                            onClick={loginAjax}
+                          >
+                            Login
+                          </button>
+                        </form>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className="modal-footer">
+                {isRegisterMode ? (
+                  <div className="forgot register-footer">
+                    <span>Already have an account?</span>{" "}
+                    <button onClick={showLoginForm}>Login</button>
+                  </div>
+                ) : (
+                  <div className="forgot login-footer">
+                    <span>
+                      Looking to{" "}
+                      <button onClick={showRegisterForm}>
+                        create an account
+                      </button>
+                      ?
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
