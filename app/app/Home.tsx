@@ -4,7 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import signupSchema from "@/form-validation-schema/signup";
-import loginSchema from "@/form-validation-schema/login"; // Assuming loginSchema is defined similarly to signupSchema
+import loginSchema from "@/form-validation-schema/login";
 import { useAuthEndpoints } from "@/hooks/useAuthEndpoints";
 import { ClipLoader } from "react-spinners";
 
@@ -51,12 +51,12 @@ export default function Home() {
   };
 
   const onSubmit = (data: FormData) => {
-    console.log(data);
     setLoading(true);
     if (isRegisterMode) {
       signup(data, (status) => {
         setLoading(false);
         if (status) {
+          setIsRegisterMode(false);
           reset();
         }
       });

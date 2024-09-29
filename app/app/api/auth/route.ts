@@ -1,15 +1,13 @@
 import axios, { AxiosError } from "axios";
-// import { verifyToken } from "@/helpers/jwtSecretGenerator";
 import { NextRequest } from "next/server";
 import { returnResponse } from "@/helpers/returnResponse";
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    console.log("signup data:", body);
-    // if (verifyToken(body.ssh as string)) {
+    console.log("login data:", body);
     const response = await axios.post(
-      process.env.BASE_API! + "/auth/signup",
+      process.env.BASE_API! + "/auth",
       { ...body },
       {
         headers: {
@@ -19,18 +17,10 @@ export async function POST(request: NextRequest) {
     );
 
     return returnResponse({
-      message: "User signed up successfully!",
+      message: "User logged in successfully!",
       response: await response.data,
-      statusCode: 201,
+      statusCode: 200,
     });
-    // } else {
-    //   return returnResponse({
-    //     NextResponse,
-    //     message: 'Invalid token!',
-    //     response: null,
-    //     statusCode: 401,
-    //   });
-    // }
   } catch (e) {
     const response = (e as AxiosError<{ message: string }>).response;
     return returnResponse({
