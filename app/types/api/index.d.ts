@@ -27,3 +27,34 @@ export type ISignUpPayload = {
   password: string;
   confirmPassword?: string;
 };
+
+export interface IEventsResponseTypes {
+  id: number;
+  creatorId: number;
+  name: string;
+  type: number;
+  address: string;
+  lat: number;
+  lon: number;
+  description: string;
+  date: string;
+  time: string;
+  createdAt: string;
+  updatedAt: string;
+  eventType: IEventTypesResponseTypes;
+}
+
+export interface IEventTypesResponseTypes {
+  id: number;
+  name: string;
+}
+
+export interface IEventsPayload {
+  type: string;
+  lat: number;
+  lon: number;
+  name: string;
+  description: string;
+  date: string;
+  time: string;
+}

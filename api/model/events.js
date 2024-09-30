@@ -34,8 +34,12 @@ const eventModel = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      coordinates: {
-        type: DataTypes.STRING,
+      lat: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+      },
+      lon: {
+        type: DataTypes.FLOAT,
         allowNull: false,
       },
       description: {

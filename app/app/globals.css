@@ -1,3 +1,90 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Remove arrow buttons from number input fields */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+/* Custom scrollbar styles */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
+}
+
+/* For IE and Edge */
+* {
+  -ms-overflow-style: none;
+}
+
+*::-ms-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-ms-scrollbar-track {
+  background: #f1f1f1;
+}
+
+*::-ms-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+*::-ms-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.input-container {
+  position: relative;
+}
+
+.input-container::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0%;
+  height: 1px;
+  z-index: 400;
+  background-color: currentColor;
+  transition: all 0.4s ease-out;
+}
+
+.input-container:focus-within::after {
+  width: 100%;
+  left: 0%;
+}

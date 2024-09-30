@@ -1,22 +1,17 @@
 import axios, { AxiosError } from "axios";
-import { NextRequest } from "next/server";
 import { returnResponse } from "@/helpers/returnResponse";
 
-export async function POST(request: NextRequest) {
+export async function GET(request: Request) {
   try {
-    const body = await request.json();
-    const response = await axios.post(
-      process.env.BASE_API! + "/auth",
-      { ...body },
-      {
-        headers: {
-          "x-api-key": process.env.X_API_KEY!,
-        },
-      }
-    );
+    const response = await axios.get(`${process.env.BASE_API!}/event/types`, {
+      headers: {
+        "x-api-key": process.env.X_API_KEY!,
+        Authorization: request.headers.get("Authorization") || "",
+      },
+    });
 
     return returnResponse({
-      message: "User logged in successfully!",
+      message: "Event types fetched successfully!",
       response: await response.data,
       statusCode: 200,
     });

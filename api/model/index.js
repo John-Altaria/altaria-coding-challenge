@@ -19,24 +19,30 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
 
 const db = {};
 
+db.User = require("./user.js")(sequelize, Sequelize.DataTypes);
+db.Event = require("./events.js")(sequelize, Sequelize.DataTypes);
+db.EventType = require("./eventType.js")(sequelize, Sequelize.DataTypes);
+
+Object.keys(db).forEach((modelName) => {
+  if (db[modelName].associate) {
+    db[modelName].associate(db);
+  }
+});
+
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
-
-db.Users = require("./user.js")(sequelize, Sequelize);
-db.Events = require("./events.js")(sequelize, Sequelize);
-db.EventTypes = require("./eventType.js")(sequelize, Sequelize);
 
 db.sequelize
   .sync({ force: false })
   .then(async () => {
     console.log("DB Sync Complete");
-    const eventTypesCount = await db.EventTypes.count();
+    const eventTypesCount = await db.EventType.count();
 
     if (eventTypesCount > 0) {
       console.log("Types Created Before....");
     } else {
       try {
-        await db.EventTypes.bulkCreate(callRegStaticData.regEventTypes());
+        await db.EventType.bulkCreate(callRegStaticData.regEventTypes());
         console.log("Event Types Created Successfully!");
       } catch (error) {
         throw error;

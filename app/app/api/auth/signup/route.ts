@@ -6,7 +6,6 @@ import { returnResponse } from "@/helpers/returnResponse";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    console.log("signup data:", body);
     // if (verifyToken(body.ssh as string)) {
     const response = await axios.post(
       process.env.BASE_API! + "/auth/signup",

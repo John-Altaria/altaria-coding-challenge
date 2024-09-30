@@ -11,7 +11,7 @@ class AuthService {
       throw new AppError("Email and password are required", 400);
     }
     try {
-      const userExists = await db.Users.findOne({ where: { email } });
+      const userExists = await db.User.findOne({ where: { email } });
 
       if (!!userExists) {
         throw new AppError("Email exists, log in?", 400);
@@ -19,7 +19,7 @@ class AuthService {
       const salt = await bcrypt.genSalt(10);
       const encryptedPassword = await bcrypt.hash(password, salt);
 
-      const user = await db.Users.create({
+      const user = await db.User.create({
         email,
         password: encryptedPassword,
       });
@@ -37,7 +37,7 @@ class AuthService {
       throw new AppError("Email and password are required", 400);
     }
     try {
-      const user = await db.Users.findOne({ where: { email } });
+      const user = await db.User.findOne({ where: { email } });
 
       if (!user) {
         throw new AppError("User not found", 404);

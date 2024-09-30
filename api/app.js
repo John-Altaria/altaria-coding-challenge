@@ -13,8 +13,10 @@ app.use(express.json());
 app.use(cors());
 
 const Auth = require("./routers/auth.routes");
+const Event = require("./routers/event.routes");
 
 app.use("/api/v1/auth", Auth);
+app.use("/api/v1/event", Event);
 
 app.get("/", (req, res) => {
   res.send("Welcome to John's map API");

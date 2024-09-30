@@ -1,11 +1,10 @@
+import { ICoordinatesStore } from "@/types/store-types";
 import { create } from "zustand";
 
-interface CoordinatesStore {
-  coordinates: [number, number];
-  setCoordinates: (coord: [number, number]) => void;
-}
-
-export const useCoordinatesStore = create<CoordinatesStore>((set) => ({
+export const useCoordinatesStore = create<ICoordinatesStore>((set) => ({
   coordinates: [0, 0],
+  currentCoords: null,
   setCoordinates: (coord) => set({ coordinates: [...coord] }),
+  setCurrentCoords: (currentCoords) =>
+    set({ currentCoords: [...currentCoords] }),
 }));
