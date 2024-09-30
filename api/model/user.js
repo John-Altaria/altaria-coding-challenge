@@ -33,6 +33,13 @@ const userModel = (sequelize, DataTypes) => {
   );
 
   User.associate = (models) => {
+    User.belongsToMany(models.Event, {
+      through: models.UserBookmark,
+      foreignKey: "userId",
+      otherKey: "eventId",
+      as: "bookmarkedEvents",
+    });
+
     User.hasMany(models.Event, {
       foreignKey: "creatorId",
       as: "events",

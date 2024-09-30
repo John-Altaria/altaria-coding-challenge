@@ -2,6 +2,9 @@ import { Space_Grotesk } from "next/font/google";
 import SVGClient from "../SVGClient";
 import { IEvents } from "@/types/store-types";
 import { useCoordinatesStore } from "@/store/coordStore";
+import { useEventsEndpoints } from "@/hooks/useEventsEndpoints";
+import { useState } from "react";
+import { ClipLoader } from "react-spinners";
 
 const eventDeets: {
   id: number;
@@ -19,12 +22,15 @@ const spaceGrotesk = Space_Grotesk({
 
 interface CardPropTypes extends IEvents {
   isOwner?: boolean;
+  isBookmarked: boolean;
 }
 
 const Card = (props: CardPropTypes) => {
   const setCurrentCoords = useCoordinatesStore(
     (state) => state.setCurrentCoords
   );
+  const [isLoading, setIsLoading] = useState<boolean | null>(null);
+
   const dateTimeString = `${props.date}T${props.time}`;
   const dateTime = new Date(dateTimeString);
 
@@ -39,6 +45,7 @@ const Card = (props: CardPropTypes) => {
     minute: "2-digit",
     hour12: true,
   });
+  const { bookmarkEvent, fetchEvents } = useEventsEndpoints();
 
   return (
     <section className="border p-[1rem] rounded-[1rem]">
@@ -104,12 +111,32 @@ const Card = (props: CardPropTypes) => {
             Edit
           </button>
         )}
-        <button className="basis-[40%] flex-1 h-[58px] items-center flex justify-center gap-[1rem] bg-[#D2B48C] text-white font-[500] rounded-[1rem]">
-          <SVGClient
-            style={{ width: "2rem", height: "2rem", color: "inherit" }}
-            src="/svg/bookmark.svg"
-          />
-          Bookmark
+        <button
+          disabled={!!isLoading ? isLoading : props.isBookmarked}
+          onClick={() => {
+            setIsLoading(true);
+            bookmarkEvent(props.id, (status) => {
+              setIsLoading(false);
+              if (status) {
+                fetchEvents();
+              }
+            });
+          }}
+          className={`basis-[40%] flex-1 h-[58px] ${
+            props.isBookmarked
+              ? "bg-white text-[#D2B48C]"
+              : "bg-[#D2B48C] text-white"
+          } items-center flex justify-center gap-[1rem] border border-[#D2B48C] font-[500] rounded-[1rem]`}
+        >
+          {!!isLoading ? (
+            <ClipLoader size={20} color="inherit" />
+          ) : (
+            <SVGClient
+              style={{ width: "2rem", height: "2rem", color: "inherit" }}
+              src="/svg/bookmark.svg"
+            />
+          )}
+          {props.isBookmarked ? "BookMarked" : "Bookmark"}
         </button>
         <button
           onClick={() => {

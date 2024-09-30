@@ -51,7 +51,7 @@ const Header = () => {
 
       {/* drawer  */}
       <Drawer open={open} onClose={() => setopen(false)}>
-        <section className="md:w-[30vw] w-[95vw] border overflow-hidden h-[100vh] gap-[2rem] flex flex-col">
+        <section className="xl:w-[30vw] md:w-[70vw] w-[95vw] border overflow-hidden h-[100vh] gap-[2rem] flex flex-col">
           <div className="flex text-[2.5rem] pt-[3rem] w-fit mx-auto items-center gap-[1rem]">
             <SVGClient
               style={{ width: "2.5rem", height: "2.5rem", color: "#000" }}
@@ -67,7 +67,6 @@ const Header = () => {
                 height: "fit-content",
                 width: "fit-content",
                 marginInline: "auto",
-                overflow: "auto",
                 color: "#D2B48C",
               }}
             >
@@ -75,6 +74,9 @@ const Header = () => {
                 sx={{
                   color: "brown",
                   "& .MuiTabs-indicator": { color: "brown", bgcolor: "brown" },
+                  "& .MuiTabs-scroller": {
+                    overflow: "auto !important",
+                  },
                 }}
                 scrollButtons="auto"
                 textColor="inherit"
@@ -91,6 +93,11 @@ const Header = () => {
                   sx={{ fontSize: "1rem" }}
                   label="Created By You"
                   value="3"
+                />
+                <Tab
+                  sx={{ fontSize: "1rem" }}
+                  label="Bookmarked By You"
+                  value="4"
                 />
               </TabList>
             </Box>
@@ -113,6 +120,7 @@ const Header = () => {
                         <Card
                           {...event}
                           isOwner={event.creatorId === user?.id}
+                          isBookmarked={event?.bookmarkedByUsers.length !== 0}
                           key={event.name + index}
                         />
                       ))
@@ -142,6 +150,7 @@ const Header = () => {
                         <Card
                           {...event}
                           isOwner={event.creatorId === user?.id}
+                          isBookmarked={event?.bookmarkedByUsers.length !== 0}
                           key={event.name + index}
                         />
                       ))
@@ -157,6 +166,23 @@ const Header = () => {
                         <Card
                           {...event}
                           isOwner={event.creatorId === user?.id}
+                          isBookmarked={event?.bookmarkedByUsers.length !== 0}
+                          key={event.name + index}
+                        />
+                      ))
+                  : null}
+              </Stack>
+            </TabPanel>
+            <TabPanel sx={{ flex: 1, overflow: "auto" }} value="4">
+              <Stack gap={"1rem"}>
+                {events
+                  ? events
+                      .filter((event) => event?.bookmarkedByUsers.length !== 0)
+                      .map((event, index) => (
+                        <Card
+                          {...event}
+                          isOwner={event.creatorId === user?.id}
+                          isBookmarked={event?.bookmarkedByUsers.length !== 0}
                           key={event.name + index}
                         />
                       ))

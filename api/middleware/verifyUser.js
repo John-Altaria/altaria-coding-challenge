@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { AppError, errorHandler } = require("../utils/error");
+const db = require("../model");
 
 const verifyUser = (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -18,7 +19,16 @@ const verifyUser = (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
     req.user = decoded;
 
-    next();
+    db.User.findByPk(decoded.id)
+      .then((user) => {
+        if (!user) {
+          throw new AppError("User not found. Please log in again.", 401);
+        }
+        next();
+      })
+      .catch((error) => {
+        errorHandler(error, res);
+      });
   } catch (error) {
     let err = error;
     if (error.name === "TokenExpiredError") {

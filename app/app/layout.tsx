@@ -1,6 +1,7 @@
 import "./globals.css";
 import "@/public/assets/css/bootstrap.css";
 import "@/public/assets/css/login-register.css";
+import { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 
@@ -8,6 +9,10 @@ const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   subsets: ["latin"],
 });
+
+export const metadata: Metadata = {
+  title: "Location Tracker - John",
+};
 
 export default function RootLayout({
   children,

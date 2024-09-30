@@ -39,6 +39,7 @@ export const useEventsEndpoints = () => {
       });
     }
   };
+
   const fetchEventTypes = async () => {
     if (!token) return;
     try {
@@ -92,5 +93,40 @@ export const useEventsEndpoints = () => {
     );
   };
 
-  return { fetchEvents, fetchEventTypes, addEvent };
+  const bookmarkEvent = async (
+    eventId: number,
+    callback: (status: boolean) => void
+  ) => {
+    if (!token) return;
+    toast.promise(
+      axios.post(
+        `/api/event/bookmark`,
+        { eventId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      ),
+      {
+        loading: "Bookmarking event...",
+        success: () => {
+          if (callback) {
+            callback(true);
+          }
+          return "Event bookmarked successfully!";
+        },
+        error: (error) => {
+          const err: AxiosError<{ message: string }> = error;
+          if (callback) {
+            callback(false);
+          }
+          return err?.response?.data?.message || "An error occurred!";
+        },
+      },
+      { ...toastTheme }
+    );
+  };
+
+  return { fetchEvents, fetchEventTypes, addEvent, bookmarkEvent };
 };

@@ -22,7 +22,7 @@ exports.login = async (req, res) => {
   };
   try {
     const data = await Auth.login(req.body);
-    res.status(201).json({ ...response, data: { ...data } });
+    res.status(200).json({ ...response, data: { ...data } });
   } catch (error) {
     errorHandler(error, res);
   }

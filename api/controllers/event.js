@@ -17,7 +17,7 @@ exports.fetchEvents = async (req, res) => {
 
 exports.addEvents = async (req, res) => {
   let response = {
-    code: 200,
+    code: 201,
     message: "Event added successfully!",
   };
   try {
@@ -35,7 +35,7 @@ exports.editEvents = async (req, res) => {
   };
   try {
     const data = await Event.editEvents(req.body);
-    res.status(201).json({ ...response, data: { ...data } });
+    res.status(200).json({ ...response, data: { ...data } });
   } catch (error) {
     errorHandler(error, res);
   }
@@ -48,7 +48,20 @@ exports.fetchEventTypes = async (req, res) => {
   };
   try {
     const data = await Event.fetchEventTypes(req.body);
-    res.status(201).json({ ...response, data });
+    res.status(200).json({ ...response, data });
+  } catch (error) {
+    errorHandler(error, res);
+  }
+};
+
+exports.bookmarkEvent = async (req, res) => {
+  let response = {
+    code: 201,
+    message: "Event Bookmarked successfuly!",
+  };
+  try {
+    await Event.bookmarkEvent(req.body, req.user);
+    res.status(201).json({ ...response });
   } catch (error) {
     errorHandler(error, res);
   }

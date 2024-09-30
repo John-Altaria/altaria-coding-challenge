@@ -64,6 +64,13 @@ const eventModel = (sequelize, DataTypes) => {
   );
 
   Event.associate = (models) => {
+    Event.belongsToMany(models.User, {
+      through: models.UserBookmark,
+      foreignKey: "eventId",
+      otherKey: "userId",
+      as: "bookmarkedByUsers",
+    });
+
     Event.belongsTo(models.User, {
       foreignKey: "creatorId",
       as: "creator",

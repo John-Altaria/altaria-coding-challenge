@@ -22,6 +22,7 @@ const db = {};
 db.User = require("./user.js")(sequelize, Sequelize.DataTypes);
 db.Event = require("./events.js")(sequelize, Sequelize.DataTypes);
 db.EventType = require("./eventType.js")(sequelize, Sequelize.DataTypes);
+db.UserBookmark = require("./userBookmark.js")(sequelize, Sequelize.DataTypes);
 
 Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {

@@ -35,6 +35,16 @@ class EventService {
               model: db.EventType,
               as: "eventType",
             },
+            {
+              model: db.User,
+              as: "bookmarkedByUsers",
+              attributes: ["id"],
+              where: {
+                id: user.id,
+              },
+              through: { attributes: [] },
+              required: false,
+            },
           ],
           where: {
             lat: {
@@ -67,6 +77,35 @@ class EventService {
   addEvents = async (body, user) => {
     try {
       await db.Event.create({ ...body, creatorId: user.id });
+      return null;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  bookmarkEvent = async (body, userData) => {
+    const { eventId } = body;
+
+    try {
+      const user = await db.User.findByPk(userData.id);
+      const event = await db.Event.findByPk(eventId);
+
+      if (!user || !event) {
+        throw new AppError("User or Event not found", 404);
+      }
+
+      const existingBookmark = await db.UserBookmark.findOne({
+        where: { userId: user.id, eventId },
+      });
+
+      if (existingBookmark) {
+        throw new AppError("Event already bookmarked", 400);
+      }
+
+      await db.UserBookmark.create({
+        userId: user.id,
+        eventId,
+      });
       return null;
     } catch (error) {
       throw error;

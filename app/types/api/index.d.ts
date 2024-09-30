@@ -42,6 +42,11 @@ export interface IEventsResponseTypes {
   createdAt: string;
   updatedAt: string;
   eventType: IEventTypesResponseTypes;
+  bookmarkedByUsers: BookmarkedByUser[];
+}
+
+export interface BookmarkedByUser {
+  id: number;
 }
 
 export interface IEventTypesResponseTypes {

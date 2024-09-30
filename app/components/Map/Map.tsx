@@ -238,7 +238,7 @@ const Map = () => {
         />
         <TileLayer url="https://tile.openstreetmap.org/{z}/{x}/{y}.png" />
         <MarkerClusterGroup chunkedLoading>
-          <Marker position={defaultCenter} icon={userIcon}>
+          <Marker position={coords} icon={userIcon}>
             <Popup>
               <Stack spacing={2}>
                 <Paper elevation={0}>
