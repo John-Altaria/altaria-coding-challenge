@@ -27,6 +27,7 @@ export function verifyToken(token: string) {
       return false;
     }
   } catch (err) {
+    console.log(err);
     return false;
   }
 }
