@@ -1,3 +1,5 @@
+"use client";
+
 import { Space_Grotesk } from "next/font/google";
 import SVGClient from "../SVGClient";
 import { IEvents } from "@/types/store-types";
@@ -129,7 +131,7 @@ const Card = (props: CardPropTypes) => {
           } items-center flex justify-center gap-[1rem] border border-[#D2B48C] font-[500] rounded-[1rem]`}
         >
           {!!isLoading ? (
-            <ClipLoader size={20} color="inherit" />
+            <ClipLoader size={20} color="#fff" />
           ) : (
             <SVGClient
               style={{ width: "2rem", height: "2rem", color: "inherit" }}
