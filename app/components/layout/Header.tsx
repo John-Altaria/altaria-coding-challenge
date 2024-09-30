@@ -109,8 +109,9 @@ const Header = () => {
               value="1"
             >
               <Stack gap={"1rem"}>
-                {events
-                  ? events
+                {events ? (
+                  events.length !== 0 ? (
+                    events
                       .sort(
                         (a, b) =>
                           new Date(b.createdAt).getTime() -
@@ -124,13 +125,17 @@ const Header = () => {
                           key={event.name + index}
                         />
                       ))
-                  : null}
+                  ) : (
+                    <div className="text-center">Uh, nothing to see here🤔</div>
+                  )
+                ) : null}
               </Stack>
             </TabPanel>
             <TabPanel sx={{ flex: 1, overflow: "auto" }} value="2">
               <Stack gap={"1rem"}>
-                {events
-                  ? events
+                {events ? (
+                  events.length !== 0 ? (
+                    events
                       .sort((a, b) => {
                         const distanceA = getDistance(
                           userLat,
@@ -154,13 +159,18 @@ const Header = () => {
                           key={event.name + index}
                         />
                       ))
-                  : null}
+                  ) : (
+                    <div className="text-center">Uh, nothing to see here🤔</div>
+                  )
+                ) : null}
               </Stack>
             </TabPanel>
             <TabPanel sx={{ flex: 1, overflow: "auto" }} value="3">
               <Stack gap={"1rem"}>
-                {events
-                  ? events
+                {events ? (
+                  events.filter((event) => event.creatorId === user?.id)
+                    .length !== 0 ? (
+                    events
                       .filter((event) => event.creatorId === user?.id)
                       .map((event, index) => (
                         <Card
@@ -170,13 +180,19 @@ const Header = () => {
                           key={event.name + index}
                         />
                       ))
-                  : null}
+                  ) : (
+                    <div className="text-center">Uh, nothing to see here🤔</div>
+                  )
+                ) : null}
               </Stack>
             </TabPanel>
             <TabPanel sx={{ flex: 1, overflow: "auto" }} value="4">
               <Stack gap={"1rem"}>
-                {events
-                  ? events
+                {events ? (
+                  events.filter(
+                    (event) => event?.bookmarkedByUsers.length !== 0
+                  ).length !== 0 ? (
+                    events
                       .filter((event) => event?.bookmarkedByUsers.length !== 0)
                       .map((event, index) => (
                         <Card
@@ -186,7 +202,10 @@ const Header = () => {
                           key={event.name + index}
                         />
                       ))
-                  : null}
+                  ) : (
+                    <div className="text-center">Uh, nothing to see here🤔</div>
+                  )
+                ) : null}
               </Stack>
             </TabPanel>
           </TabContext>
