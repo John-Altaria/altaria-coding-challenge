@@ -33,6 +33,9 @@ export const useAuthEndpoints = () => {
           if (callback) {
             callback(false);
           }
+          if (err?.response?.status === 401) {
+            replace("/");
+          }
           return err?.response?.data?.message || "An error occurred!";
         },
       },
@@ -64,6 +67,9 @@ export const useAuthEndpoints = () => {
           const err: AxiosError<{ message: string }> = error;
           if (callback) {
             callback(false);
+          }
+          if (err?.response?.status === 401) {
+            replace("/");
           }
           return err?.response?.data?.message || "An error occurred!";
         },

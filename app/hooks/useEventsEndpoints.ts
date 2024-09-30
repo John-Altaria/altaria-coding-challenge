@@ -11,12 +11,14 @@ import {
 import { useEventsStore } from "@/store/eventsStore";
 import toast from "react-hot-toast";
 import toastTheme from "@/helpers/toastTheme";
+import { useRouter } from "next/navigation";
 
 export const useEventsEndpoints = () => {
   const coords = useCoordinatesStore.getState().coordinates;
   const token = authStore.getState().token;
   const setEvents = useEventsStore.getState().setEvents;
   const setEventTypes = useEventsStore.getState().setEventTypes;
+  const { replace } = useRouter();
 
   const fetchEvents = async (coord?: string) => {
     if (!token) return;
@@ -33,7 +35,9 @@ export const useEventsEndpoints = () => {
       setEvents(events.response.data);
     } catch (error) {
       const err = error as AxiosError<{ message: string }>;
-
+      if (err?.response?.status === 401) {
+        replace("/");
+      }
       toast.error(err?.response?.data?.message || "An error occurred!", {
         ...toastTheme,
       });
@@ -55,7 +59,9 @@ export const useEventsEndpoints = () => {
       setEventTypes(eventTypes.response.data);
     } catch (error) {
       const err = error as AxiosError<{ message: string }>;
-
+      if (err?.response?.status === 401) {
+        replace("/");
+      }
       toast.error(err?.response?.data?.message || "An error occurred!", {
         ...toastTheme,
       });
@@ -85,6 +91,9 @@ export const useEventsEndpoints = () => {
           const err: AxiosError<{ message: string }> = error;
           if (callback) {
             callback(false);
+          }
+          if (err?.response?.status === 401) {
+            replace("/");
           }
           return err?.response?.data?.message || "An error occurred!";
         },
@@ -120,6 +129,9 @@ export const useEventsEndpoints = () => {
           const err: AxiosError<{ message: string }> = error;
           if (callback) {
             callback(false);
+          }
+          if (err?.response?.status === 401) {
+            replace("/");
           }
           return err?.response?.data?.message || "An error occurred!";
         },
